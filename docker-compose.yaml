@@ -26,6 +26,21 @@ services:
 
     networks:
       - laravel
+  node-service:
+    build:
+      context: ./node-service
+      dockerfile: Dockerfile
+    container_name: node-service
+    restart: unless-stopped
+    working_dir: /usr/src/app
+    volumes:
+      - ./node-service:/usr/src/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
+    networks:
+      - laravel
 
   mysql:
     image: mysql:5.7
@@ -56,15 +71,15 @@ services:
     networks:
       - laravel
 
-  mailhog:
-    image: mailhog/mailhog
-    container_name: mailhog
-    restart: unless-stopped
-    ports:
-      - 1025:1025
-      - 8025:8025
-    networks:
-      - laravel
+  # mailhog:
+  #   image: mailhog/mailhog
+  #   container_name: mailhog
+  #   restart: unless-stopped
+  #   ports:
+  #     - 1025:1025
+  #     - 8025:8025
+  #   networks:
+  #     - laravel
 networks:
   laravel:
     driver: bridge
